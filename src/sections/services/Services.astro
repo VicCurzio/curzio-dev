@@ -1,0 +1,87 @@
+---
+import type { Copy } from "@/content";
+import SectionHeader from "@/shared/ui/SectionHeader.astro";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const services = copy.services;
+---
+
+<section id="servicios" class="section" aria-labelledby="services-title">
+  <div class="page stack">
+    <SectionHeader
+      index="02 / services"
+      id="services-title"
+      title={services.title}
+      sub={services.sub}
+    />
+
+    <ul class="grid">
+      {
+        services.items.map((service, i) => (
+          <li class="card">
+            <span class="mono num">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="name">{service.name}</h3>
+            <p class="desc">{service.desc}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-gap);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition:
+      border-color var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+
+  .card:hover {
+    border-color: var(--border);
+    transform: translateY(-2px);
+  }
+
+  .num {
+    color: var(--accent);
+  }
+
+  .name {
+    font-size: var(--text-base);
+    font-weight: 600;
+  }
+
+  .desc {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

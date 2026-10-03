@@ -1,0 +1,91 @@
+---
+import type { Copy } from "@/content";
+import SectionHeader from "@/shared/ui/SectionHeader.astro";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const about = copy.about;
+---
+
+<section id="sobre" class="section" aria-labelledby="about-title">
+  <div class="page layout">
+    <SectionHeader index="05 / about" id="about-title" title={about.title} />
+
+    <div class="body">
+      <div class="prose">
+        {about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+
+      <dl class="stats">
+        {
+          about.stats.map((stat) => (
+            <div class="stat">
+              <dt class="value">{stat.value}</dt>
+              <dd class="label">{stat.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-gap);
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 62ch;
+    color: var(--text-muted);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .value {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+
+  .label {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: var(--text-xs);
+  }
+</style>

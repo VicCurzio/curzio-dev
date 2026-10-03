@@ -1,0 +1,98 @@
+---
+import type { Copy, Locale } from "@/content";
+import { LOCALE_PREFIX, LOCALES } from "@/content";
+import { SITE } from "@/shared/config/site";
+import "@/styles/base.css";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const locale = copy.locale as Locale;
+
+const canonical = new URL(LOCALE_PREFIX[locale], Astro.site ?? SITE.url);
+const ogImage = new URL(SITE.ogImage, Astro.site ?? SITE.url);
+
+const alternates = LOCALES.map((code) => ({
+  code,
+  href: new URL(LOCALE_PREFIX[code], Astro.site ?? SITE.url).href,
+}));
+
+/**
+ * Datos estructurados: el tipo tiene que ser el correcto, no uno generico.
+ * Aca lo que se ofrece lo ofrece una persona, no una empresa: `Person`.
+ */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.name,
+  url: canonical.href,
+  email: `mailto:${SITE.email}`,
+  jobTitle: SITE.role,
+  address: { "@type": "PostalAddress", addressCountry: SITE.locationRegion },
+  sameAs: [SITE.github, SITE.linkedin].filter(Boolean),
+  knowsAbout: copy.stack.groups.flatMap((group) => group.items),
+  makesOffer: copy.services.items.map((service) => ({
+    "@type": "Offer",
+    itemOffered: { "@type": "Service", name: service.name, description: service.desc },
+  })),
+};
+---
+
+<!doctype html>
+<html lang={copy.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={SITE.themeColor} />
+
+    <title>{copy.meta.title}</title>
+    <meta name="description" content={copy.meta.description} />
+    <link rel="canonical" href={canonical.href} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.code} href={alt.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0]!.href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={copy.htmlLang.replace("-", "_")} />
+    <meta property="og:title" content={copy.meta.title} />
+    <meta property="og:description" content={copy.meta.description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={copy.meta.ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">{copy.nav.skip}</a>
+    <div class="hairline" aria-hidden="true"></div>
+    <slot />
+  </body>
+</html>
+
+<style>
+  .hairline {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 1px;
+    z-index: 60;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.5;
+  }
+</style>

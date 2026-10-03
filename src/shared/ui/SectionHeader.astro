@@ -1,0 +1,46 @@
+---
+/**
+ * Encabezado de seccion: numero de orden, titulo y bajada. Sin margin: el
+ * `gap` de la seccion decide la separacion con el contenido.
+ */
+interface Props {
+  index: string;
+  title: string;
+  sub?: string;
+  id?: string;
+}
+
+const { index, title, sub, id } = Astro.props;
+---
+
+<header class="header">
+  <p class="mono index">{index}</p>
+  <h2 id={id} class="title">{title}</h2>
+  {sub && <p class="sub">{sub}</p>}
+</header>
+
+<style>
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 60ch;
+  }
+
+  .index {
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .sub {
+    color: var(--text-muted);
+    font-size: var(--text-md);
+  }
+</style>

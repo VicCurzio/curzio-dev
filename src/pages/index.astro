@@ -1,0 +1,11 @@
+---
+/**
+ * Portada en espanol. Va en la raiz y no en /es/ porque el idioma por defecto
+ * no lleva prefijo (prefixDefaultLocale: false en astro.config.mjs).
+ *
+ * La ruta no compone nada: elige idioma y delega en la pantalla.
+ */
+import Home from "@/screens/home/Home.astro";
+---
+
+<Home locale="es" />

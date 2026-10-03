@@ -1,0 +1,56 @@
+---
+/**
+ * La portada: la unica pantalla del sitio, y la que decide en que orden se
+ * montan las secciones.
+ *
+ * Por que vive aca y no en la pagina: la regla de capas del repo dice que la
+ * screen compone secciones y el archivo de ruta no. La pagina existe para
+ * decir "esta URL muestra esto", nada mas.
+ *
+ * Recibe el idioma y no el texto ya resuelto, porque `pages` no puede importar
+ * de `content`. El literal que le pasa la ruta igual queda tipado contra
+ * `Locale`, asi que un idioma que no existe no compila.
+ *
+ * El orden es el de una venta, no el del menu: primero que hago (servicios),
+ * despues como trabajo (proceso), y recien ahi la prueba de que funciona
+ * (trabajo). El stack va despues porque la herramienta importa menos que el
+ * resultado, y sobre mi antes del contacto porque es lo ultimo que falta para
+ * decidirse a escribir.
+ */
+import type { Locale } from "@/content";
+import { COPY } from "@/content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import About from "@/sections/about/About.astro";
+import Contact from "@/sections/contact/Contact.astro";
+import Footer from "@/sections/footer/Footer.astro";
+import Header from "@/sections/header/Header.astro";
+import Hero from "@/sections/hero/Hero.astro";
+import Process from "@/sections/process/Process.astro";
+import Services from "@/sections/services/Services.astro";
+import Stack from "@/sections/stack/Stack.astro";
+import Work from "@/sections/work/Work.astro";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+---
+
+<BaseLayout copy={copy}>
+  <Header copy={copy} />
+
+  <!-- El id lo pide el enlace de salto del layout, que manda aca. -->
+  <main id="main">
+    <Hero copy={copy} />
+    <Services copy={copy} />
+    <Process copy={copy} />
+    <Work copy={copy} />
+    <Stack copy={copy} />
+    <About copy={copy} />
+    <Contact copy={copy} />
+  </main>
+
+  <Footer copy={copy} />
+</BaseLayout>

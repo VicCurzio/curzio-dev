@@ -1,0 +1,189 @@
+---
+import type { Copy, Locale } from "@/content";
+import { LOCALE_PREFIX, LOCALES } from "@/content";
+import { SITE } from "@/shared/config/site";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const active = copy.locale as Locale;
+const home = LOCALE_PREFIX[active];
+
+const links = [
+  { href: "#trabajo", label: copy.nav.work },
+  { href: "#servicios", label: copy.nav.services },
+  { href: "#proceso", label: copy.nav.process },
+  { href: "#sobre", label: copy.nav.about },
+];
+---
+
+<header class="site-header">
+  <div class="page bar">
+    <a class="brand" href={home}>
+      <span class="brand-name">{SITE.name}</span>
+      <span class="mono brand-role">full stack</span>
+    </a>
+
+    <nav class="nav" aria-label={copy.nav.work}>
+      <ul class="links">
+        {
+          links.map((link) => (
+            <li>
+              <a class="link" href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="langs" role="group" aria-label={copy.nav.langLabel}>
+        {
+          LOCALES.map((code) => (
+            <a
+              class:list={["lang", { current: code === active }]}
+              href={LOCALE_PREFIX[code]}
+              hreflang={code}
+              aria-current={code === active ? "true" : undefined}
+            >
+              {code.toUpperCase()}
+            </a>
+          ))
+        }
+      </div>
+
+      <a class="cta" href="#contacto">{copy.nav.contact}</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(14px);
+    background: color-mix(in oklab, var(--bg) 82%, transparent);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 68px;
+    padding-block: var(--space-3);
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    color: var(--text);
+  }
+
+  .brand-name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-role {
+    color: var(--text-dim);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .link {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+  }
+
+  .link:hover {
+    color: var(--text);
+    background: var(--surface-raised);
+  }
+
+  .langs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .lang {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+  }
+
+  .lang:hover {
+    color: var(--text);
+  }
+
+  .lang.current {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
+
+  .cta {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      filter var(--dur-fast) var(--ease-out);
+  }
+
+  .cta:hover {
+    color: var(--accent-ink);
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 640px) {
+    .links {
+      order: 3;
+      width: 100%;
+    }
+  }
+</style>

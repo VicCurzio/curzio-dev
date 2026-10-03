@@ -1,0 +1,90 @@
+---
+import type { Copy } from "@/content";
+import { SITE } from "@/shared/config/site";
+import Icon from "@/shared/ui/Icon.astro";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="site-footer">
+  <div class="page bar">
+    <p class="note">{copy.footer.note}</p>
+
+    <ul class="links">
+      <li>
+        <a class="link" href={`mailto:${SITE.email}`}>
+          <Icon name="mail" size={16} />
+          {SITE.email}
+        </a>
+      </li>
+      <li>
+        <a class="link" href={SITE.github} rel="me noopener" target="_blank">
+          <Icon name="github" size={16} />
+          GitHub
+        </a>
+      </li>
+      {
+        SITE.linkedin && (
+          <li>
+            <a class="link" href={SITE.linkedin} rel="me noopener" target="_blank">
+              <Icon name="linkedin" size={16} />
+              LinkedIn
+            </a>
+          </li>
+        )
+      }
+    </ul>
+
+    <p class="mono rights">&copy; {year} {SITE.name}. {copy.footer.rights}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border-soft);
+    padding-block: var(--space-12);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .note {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .link:hover {
+    color: var(--accent);
+  }
+
+  .rights {
+    color: var(--text-dim);
+  }
+</style>

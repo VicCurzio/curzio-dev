@@ -1,0 +1,160 @@
+---
+import type { Copy, ProjectStatus } from "@/content";
+import SectionHeader from "@/shared/ui/SectionHeader.astro";
+import Tag from "@/shared/ui/Tag.astro";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const work = copy.work;
+
+const TONE: Record<ProjectStatus, "live" | "shipped" | "building"> = {
+  live: "live",
+  shipped: "shipped",
+  building: "building",
+};
+---
+
+<section id="trabajo" class="section" aria-labelledby="work-title">
+  <div class="page stack">
+    <SectionHeader index="01 / work" id="work-title" title={work.title} sub={work.sub} />
+
+    <ol class="list">
+      {
+        work.projects.map((project) => (
+          <li class="project">
+            <div class="head">
+              <span class="mono num">{project.num}</span>
+              <h3 class="name">{project.name}</h3>
+              <span class="mono year">{project.year}</span>
+              <Tag tone={TONE[project.status]}>{work.statusLabel[project.status]}</Tag>
+            </div>
+
+            <div class="body">
+              <div class="text">
+                <p class="blurb">{project.blurb}</p>
+                <p class="detail">{project.detail}</p>
+                <ul class="stack-list">
+                  {project.stack.map((item) => (
+                    <li>
+                      <Tag>{item}</Tag>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <figure class="shot">
+                <div class="shot-frame">
+                  <span class="mono shot-label">{project.shot}</span>
+                </div>
+              </figure>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-gap);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .num {
+    color: var(--accent);
+  }
+
+  .name {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  .year {
+    color: var(--text-dim);
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .blurb {
+    font-size: var(--text-md);
+    max-width: 60ch;
+  }
+
+  .detail {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    max-width: 60ch;
+  }
+
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .shot {
+    margin: 0;
+  }
+
+  /* Hueco de captura: dice que va a haber ahi, no finge una imagen. */
+  .shot-frame {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .shot-label {
+    color: var(--text-dim);
+  }
+</style>

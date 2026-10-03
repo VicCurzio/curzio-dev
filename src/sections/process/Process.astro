@@ -1,0 +1,91 @@
+---
+import type { Copy } from "@/content";
+import SectionHeader from "@/shared/ui/SectionHeader.astro";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const process = copy.process;
+---
+
+<section id="proceso" class="section" aria-labelledby="process-title">
+  <div class="page stack">
+    <SectionHeader
+      index="03 / process"
+      id="process-title"
+      title={process.title}
+      sub={process.sub}
+    />
+
+    <ol class="steps">
+      {
+        process.steps.map((step, i) => (
+          <li class="step">
+            <span class="mono num">{String(i + 1).padStart(2, "0")}</span>
+            <div class="text">
+              <h3 class="name">{step.name}</h3>
+              <p class="mono time">{step.time}</p>
+              <p class="desc">{step.desc}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-gap);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 2px solid var(--border);
+  }
+
+  .num {
+    color: var(--accent);
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .name {
+    font-size: var(--text-base);
+    font-weight: 600;
+  }
+
+  .time {
+    color: var(--state-building);
+  }
+
+  .desc {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

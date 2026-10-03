@@ -1,0 +1,117 @@
+---
+import type { Copy } from "@/content";
+import { SITE } from "@/shared/config/site";
+import Button from "@/shared/ui/Button.astro";
+import Icon from "@/shared/ui/Icon.astro";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+const hero = copy.hero;
+---
+
+<section class="hero">
+  <div class="grid-wash" aria-hidden="true"></div>
+
+  <div class="page inner rise">
+    <p class="status">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="mono">{hero.status}</span>
+    </p>
+
+    <h1 class="title">
+      {hero.titleLead}{" "}
+      <em class="accent">{hero.titleAccent}</em>
+    </h1>
+
+    <p class="sub">{hero.sub}</p>
+
+    <div class="actions">
+      <Button href="#trabajo">
+        {hero.ctaWork}
+        <Icon name="arrow-right" size={18} />
+      </Button>
+      <Button href="#contacto" variant="secondary">{hero.ctaTalk}</Button>
+      <Button href={SITE.cvPath} variant="ghost" download>
+        <Icon name="download" size={18} />
+        {hero.ctaCv}
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(64px, 9vw, 96px);
+  }
+
+  .grid-wash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(color-mix(in oklab, var(--border) 50%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--border) 50%, transparent) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 60% at 30% 20%, black, transparent 75%);
+  }
+
+  .inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+    border-radius: var(--radius-full);
+    background: var(--accent-wash);
+    color: var(--accent);
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  .title {
+    max-width: 20ch;
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+  }
+
+  .sub {
+    max-width: 52ch;
+    color: var(--text-muted);
+    font-size: var(--text-md);
+    line-height: 1.62;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+</style>
